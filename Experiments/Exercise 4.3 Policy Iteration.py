@@ -1,4 +1,3 @@
-
 import test_dp               # required for testing and grading your code
 import gridworld_mdp as gw   # defines the MDP for a 4x4 gridworld
 
@@ -16,44 +15,64 @@ def policy_iteration(state_count, gamma, theta, get_available_actions, get_trans
     'get_transitions' is the MDP state / reward transiton function.  It accepts two parameters, state and action, and returns
         a list of tuples, where each tuple is of the form: (next_state, reward, probabiliity).  
     """
-    V = state_count*[0]                # init all state value estimates to 0
+    # 1.Initialization
+    # init all state value estimates to 0
+    V = state_count*[0]                
     pi = state_count*[0]
     
     # init with a policy with first avail action for each state
     for s in range(state_count):
         avail_actions = get_available_actions(s)
         pi[s] = avail_actions[0]
+    # print("Initial policy", pi)
     
-
-    w
-    while True:
-        delta = 0
-        for state in range(state_count):
-            actions = gw.get_available_actions(state)
-            v = V[state]
-            v_new = 0
-            for action in actions:
+    iterations = 0
+    policy_stable = False
+    while not policy_stable:
+        iterations += 1
+                
+        # 3. Policy Evaluation
+        while True:
+            delta = 0
+            
+            V_prev = list(V)
+            V = state_count*[0]
+            for state in range(state_count):
+                action = pi[state]
                 transitions = gw.get_transitions(state=state, action=action)
                 for (trans) in transitions:
                     next_state, reward, probability = trans    # unpack tuple
-                    v_new = v_new + probability * (reward + gamma * V[next_state])
-            V[state] = v_new
-            delta = max(delta, abs(v - V[state]))
+                    V[state] = V[state] + probability * (reward + gamma * V_prev[next_state])
+            delta = max(delta,abs(V[state] - V_prev[state]))
+            
+            if delta < theta:
+                break
 
+        # 3. Policy Improvement
         policy_stable = True
-        for state in range(state_count):
-            actions = gw.get_available_actions(state)
+        for state in range(state_count):    
             old_action = pi[state]
-            pi[state] = actions[np.argmax(V)]
+            
+            V_best = V[state]
+            actions = gw.get_available_actions(state)
+            for action in actions:
+                transitions = gw.get_transitions(state=state, action=action)
+                V_sa = 0
+                for (trans) in transitions:
+                    next_state, reward, probability = trans    # unpack tuple
+                    V_sa = V_sa + probability * (reward + gamma * V[next_state])
+                if V_sa > V_best:
+                    pi[state] = action
+                    V_best = V_sa
+
             if old_action != pi[state]:
                 policy_stable = False
 
-        if delta < theta:
-            break
-    # insert code here to iterate using policy evaluation and policy improvement (see Policy Iteration algorithm)
+        #print("Iteration:", iterations)
+        #print("Values=", V)
+        #print("Policy=", pi)
+        
     return (V, pi)        # return both the final value function and the final policy
-
-
 n_states = gw.get_state_count()
 
 # test our function

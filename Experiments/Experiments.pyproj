@@ -27,6 +27,9 @@
     <Compile Include="Exercise 4.3 Policy Iteration.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Exercise 4.4 Value Iteration.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Experiments.py" />
     <Compile Include="gridworld_mdp.py" />
     <Compile Include="module1.py">

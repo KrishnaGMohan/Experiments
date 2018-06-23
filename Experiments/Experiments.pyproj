@@ -27,6 +27,7 @@
     <Compile Include="Exercise 4.3 Policy Iteration.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Exercise 4.4 Value Iteration - B.py" />
     <Compile Include="Exercise 4.4 Value Iteration.py">
       <SubType>Code</SubType>
     </Compile>
@@ -44,7 +45,7 @@
     <Compile Include="Exercise 4.1 Policy Evaluation with 2 Arrays.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="module6.py">
+    <Compile Include="ReadImageExtractText.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="test_dp.py" />

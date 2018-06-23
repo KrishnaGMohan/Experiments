@@ -29,30 +29,26 @@ def value_iteration(state_count, gamma, theta, get_available_actions, get_transi
     while True:
         delta = 0
         V_prev = list(V)
-        V = state_count*[-11]
+        V = state_count*[0]
 
-        for state in range(state_count):    
-            V_best = V_prev[state]
+        for state in range(state_count):
             actions = gw.get_available_actions(state)
+            v_best = V_prev[state]
             for action in actions:
-                #print("State:", state, "Action:", action)
+                v_sa = 0
                 transitions = gw.get_transitions(state=state, action=action)
-                V_sa = 0
                 for (trans) in transitions:
                     next_state, reward, probability = trans    # unpack tuple
-                    V_sa = V_sa + probability * (reward + gamma * V_prev[next_state])
-
-                if V_sa > V_best:
+                    v_sa = v_sa + probability * (reward + gamma * V_prev[next_state])
+                if v_sa < v_best:
                     pi[state] = action
-                    V_best = V_sa
-                    V[state] = V_sa
-            delta = max(delta,abs(V[state] - V_prev[state]))
-
+                    v_best = v_sa
+            V[state] = v_best
+            delta = max(delta, abs(V[state] - V_prev[state]))
+        print(V)
         if delta < theta:
             break
 
-    V = V_prev
-    # insert code here to iterate using policy evaluation and policy improvement (see Policy Iteration algorithm)
     return (V, pi)        # return both the final value function and the final policy
 
 
